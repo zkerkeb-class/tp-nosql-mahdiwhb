@@ -1,0 +1,378 @@
+{
+  "info": {
+    "name": "Pokemon API - NoSQL TP",
+    "description": "Collection complète des routes de l'API Pokémon",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "🔓 Public Routes",
+      "item": [
+        {
+          "name": "GET All Pokemons",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/pokemons?limit=10&page=1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "pokemons"],
+              "query": [
+                {"key": "limit", "value": "10"},
+                {"key": "page", "value": "1"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Pokemon by ID (Pikachu)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/pokemons/25",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "pokemons", "25"]
+            }
+          }
+        },
+        {
+          "name": "GET Filter by Type=Fire",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/pokemons?type=Fire&limit=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "pokemons"],
+              "query": [
+                {"key": "type", "value": "Fire"},
+                {"key": "limit", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Search by Name (pika)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/pokemons?name=pika",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "pokemons"],
+              "query": [
+                {"key": "name", "value": "pika"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Sort by Top Attack",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/pokemons?sort=-base.Attack&limit=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "pokemons"],
+              "query": [
+                {"key": "sort", "value": "-base.Attack"},
+                {"key": "limit", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Stats Overview",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/pokemons/stats/overview",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "pokemons", "stats", "overview"]
+            }
+          }
+        },
+        {
+          "name": "GET Stats by Type",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/pokemons/stats/by-type",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "pokemons", "stats", "by-type"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔑 Authentication",
+      "item": [
+        {
+          "name": "POST Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"ash\",\n  \"password\": \"bulbasaur123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "POST Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"ash\",\n  \"password\": \"bulbasaur123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛡️ Protected - CRUD Pokemons",
+      "item": [
+        {
+          "name": "POST Create Pokemon",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 999,\n  \"name\": {\n    \"english\": \"Mewcustom\",\n    \"french\": \"Mewtocustom\"\n  },\n  \"type\": [\"Psychic\"],\n  \"base\": {\n    \"HP\": 100,\n    \"Attack\": 100,\n    \"Defense\": 100,\n    \"SpecialAttack\": 154,\n    \"SpecialDefense\": 90,\n    \"Speed\": 130\n  }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/pokemons",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "pokemons"]
+            }
+          }
+        },
+        {
+          "name": "PUT Update Pokemon",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"base\": {\n    \"HP\": 120,\n    \"Attack\": 120,\n    \"Defense\": 120\n  }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/pokemons/999",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "pokemons", "999"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Pokemon",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/pokemons/999",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "pokemons", "999"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "❤️ Favorites",
+      "item": [
+        {
+          "name": "GET My Favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/favorites",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "favorites"]
+            }
+          }
+        },
+        {
+          "name": "POST Add Favorite (Pikachu)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/favorites/25",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "favorites", "25"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Remove Favorite",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/favorites/25",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "favorites", "25"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎖️ Teams",
+      "item": [
+        {
+          "name": "POST Create Team",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My First Team\",\n  \"pokemons\": [25, 6, 39, 58, 65, 4]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/teams",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "teams"]
+            }
+          }
+        },
+        {
+          "name": "GET My Teams",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/teams",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "teams"]
+            }
+          }
+        },
+        {
+          "name": "GET Team Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/teams/TEAM_ID_HERE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "teams", "TEAM_ID_HERE"]
+            },
+            "description": "Replace TEAM_ID_HERE with actual team ID from GET My Teams"
+          }
+        },
+        {
+          "name": "PUT Update Team",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Team Name\",\n  \"pokemons\": [25, 6, 39, 58, 65, 7]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/teams/TEAM_ID_HERE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "teams", "TEAM_ID_HERE"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Team",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/teams/TEAM_ID_HERE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "teams", "TEAM_ID_HERE"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
