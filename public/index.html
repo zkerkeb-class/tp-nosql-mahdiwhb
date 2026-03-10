@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéTeam • National Pokédex System</title>
+    <meta name="description" content="Immersive Pokédex interface - Discover, collect, and build your ultimate Pokémon team">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ═══════════════════════════════════════════════════════════════════
+         POKÉDEX TERMINAL — ENERGY FIELD BACKGROUND
+         ═══════════════════════════════════════════════════════════════ -->
+    <div class="energy-field" aria-hidden="true">
+        <div class="energy-orb energy-orb-1"></div>
+        <div class="energy-orb energy-orb-2"></div>
+        <div class="energy-orb energy-orb-3"></div>
+    </div>
+    <div class="bg-hex-grid" aria-hidden="true"></div>
+    <div class="bg-grain" aria-hidden="true"></div>
+    <div class="bg-vignette" aria-hidden="true"></div>
+    
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         HEADER - NAVIGATION & AUTHENTICATION
+         ═══════════════════════════════════════════════════════════════════ -->
+    <header>
+        <div class="header-content">
+            <div class="logo" onclick="switchTab('pokedex')">
+                <span class="logo-icon">⚡</span>
+                <span>PokeTeam</span>
+            </div>
+            <div class="header-right">
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-secondary" onclick="openAuthModal('login')">Connexion</button>
+                    <button class="btn btn-primary" onclick="openAuthModal('register')">Inscription</button>
+                </div>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <div>
+                        <div class="user-name" id="userName"></div>
+                    </div>
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <button class="btn btn-logout" onclick="logout()">Déconnexion</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs-container" id="tabsContainer" style="display: none;">
+            <button class="tab-button active" onclick="switchTab('pokedex')">Pokédex</button>
+            <button class="tab-button" onclick="switchTab('favorites')">Mon Pokédex</button>
+            <button class="tab-button" onclick="switchTab('teams')">Mes Équipes</button>
+        </div>
+
+        <!-- Pokedex Tab -->
+        <div id="pokedex-tab" class="tab-content active">
+            <!-- Stats -->
+            <div class="stats-container" id="statsContainer"></div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <div class="control-group">
+                    <label for="searchType">Filtre par Type</label>
+                    <select id="searchType">
+                        <option value="">Tous les types</option>
+                        <option value="Fire">Fire</option>
+                        <option value="Water">Water</option>
+                        <option value="Grass">Grass</option>
+                        <option value="Electric">Electric</option>
+                        <option value="Psychic">Psychic</option>
+                        <option value="Poison">Poison</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Flying">Flying</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="searchName">Chercher par Nom</label>
+                    <input type="text" id="searchName" placeholder="Pikachu, Charizard...">
+                </div>
+
+                <div class="control-group">
+                    <label for="sortBy">Trier par</label>
+                    <select id="sortBy">
+                        <option value="">Défaut</option>
+                        <option value="name.french">Nom (A→Z)</option>
+                        <option value="-name.french">Nom (Z→A)</option>
+                        <option value="-base.Attack">Attaque (Haute)</option>
+                        <option value="-base.HP">HP (Haute)</option>
+                        <option value="-base.Speed">Vitesse (Haute)</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-primary" onclick="loadPokemons()" style="width: 100%;">Chercher</button>
+                </div>
+            </div>
+
+            <!-- Pokemon Grid -->
+            <div class="pokemon-grid" id="pokemonGrid"></div>
+            
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
+        </div>
+
+        <!-- Teams Tab -->
+        <div id="teams-tab" class="tab-content">
+            <div class="teams-header">
+                <h2>Mes Équipes</h2>
+                <button class="btn-add-team" onclick="openTeamModal()">+ Créer une Équipe</button>
+            </div>
+            <div class="teams-list" id="teamsList"></div>
+        </div>
+
+        <!-- Favorites Tab -->
+        <div id="favorites-tab" class="tab-content">
+            <div class="teams-header">
+                <h2>Mon Pokédex</h2>
+            </div>
+            <div class="pokemon-grid" id="favoritesGrid"></div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Authentification</h2>
+                <button class="close-modal" onclick="closeAuthModal()">&times;</button>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab-button active" onclick="switchAuthTab('login')">Connexion</button>
+                <button class="auth-tab-button" onclick="switchAuthTab('register')">Inscription</button>
+            </div>
+
+            <div id="errorMessage"></div>
+
+            <!-- Login Form -->
+            <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginUsername">Nom d'utilisateur</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Mot de passe</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px;">Se connecter</button>
+            </form>
+
+            <!-- Register Form -->
+            <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="registerUsername">Nom d'utilisateur</label>
+                    <input type="text" id="registerUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerFirstName">Prénom</label>
+                    <input type="text" id="registerFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerLastName">Nom</label>
+                    <input type="text" id="registerLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Mot de passe</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px;">S'inscrire</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pokemon Modal -->
+    <div class="modal" id="pokemonModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <button class="close-modal" onclick="closePokemonModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalPokemon"></div>
+        </div>
+    </div>
+
+    <!-- Team Modal -->
+    <div class="modal" id="teamModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="teamModalTitle">Créer une Équipe</h2>
+                <button class="close-modal" onclick="closeTeamModal()">&times;</button>
+            </div>
+            <form id="teamForm" onsubmit="handleTeamSubmit(event)">
+                <div class="form-group">
+                    <label for="teamName">Nom de l'équipe</label>
+                    <input type="text" id="teamName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="addPokemonSelect">Ajouter un Pokémon à votre équipe</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="addPokemonSelect" style="flex: 1;">
+                            <option value="">-- Sélectionner un Pokémon --</option>
+                        </select>
+                        <button type="button" class="btn btn-primary" onclick="addPokemonToTeam()" style="padding: 12px 25px; width: auto;">+ Ajouter</button>
+                    </div>
+                </div>
+
+                <div class="selected-pokemons">
+                    <h4>Pokémons sélectionnés (<span id="pokemonCount">0</span>/6)</h4>
+                    <div id="selectedPokemonsList" style="max-height: 250px; overflow-y: auto;"></div>
+                </div>
+
+                <div class="modal-buttons" style="margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary">Créer Équipe</button>
+                    <button type="button" class="btn-cancel" onclick="closeTeamModal()">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SCRIPTS - APPLICATION JAVASCRIPT
+         ═══════════════════════════════════════════════════════════════════ -->
+    <script src="app.js"></script>
+</body>
+</html>
